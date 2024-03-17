@@ -288,6 +288,7 @@ bool Dataset::loadFromCSV(const char *fileName)
     numCols = header_name->length();
     return true;
 }
+// void Dataset::printHead(int nRows,  int nCols) const {};
 // Implement of printHead
 void Dataset::printHead(int nRows, int nCols) const
 {
@@ -297,6 +298,7 @@ void Dataset::printHead(int nRows, int nCols) const
     {
         cout << headerNames.get(j) << " ";
     }
+    // this->columns();
     cout << endl;
     // Print data
     int totalRows = data->length();
@@ -388,6 +390,7 @@ void Dataset::columns() const
         cout << headerNames.get(j) << " ";
     }
     cout << headerNames.get(header_name->length() - 1);
+    // header_name->print();
 }
 // Implement of Axis() method
 bool Dataset::drop(int axis, int index, std::string columns)
@@ -495,11 +498,33 @@ void kNN::fit(const Dataset &X_train, const Dataset &y_train)
     this->y_train = y_train;
     X_train.getShape(train_row,train_col);
 }
+double kNN::EuclideanDistance(const Dataset &X_test)
+{
+    double sum = 0.0;
+    for(int i = 0; i < train_col;i++)
+    {
+        sum += pow(X_test.getData()->get(i)- X_train.getData()->get(i),2);
+    }
+    return sqrt(sum);
+};
 
 Dataset kNN::predict(const Dataset &X_test)
 {
     Dataset y_pred;
-
+    int temp_result = 0;  // temp result for Euclidean distance
+    Dataset X_save;
+    // List to save data of Euclidean distance of each label
+    List<int> *save = new SinglyLinkedList<int>();
+    // Number of dac diem X_test
+    int X_test_number = X_test.getData()->length();
+    // Calculate distance from X_test to X_train and save in save List 
+    for(int i = 0; i<X_test_number;i++)
+    {
+        for(int j = 0; j<train_col;j++)
+        {
+            return y_pred;
+        }
+    }
     return y_pred;
 }
 

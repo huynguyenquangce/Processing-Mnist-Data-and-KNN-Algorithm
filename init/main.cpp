@@ -2,7 +2,7 @@
 // #include "kNN.cpp"
 void tc1(){
     Dataset dataset;
-    dataset.loadFromCSV("mnist.csv");
+    dataset.loadFromCSV("test.csv");
     // // dataset.extract(0,0).printHead();
     // dataset.printHead();
     // cout<<"\n";
@@ -20,21 +20,27 @@ void tc1(){
     kNN knn;
     Dataset X_train, X_test, y_train, y_test;
     Dataset feature = dataset.extract(0, -1, 1, -1);
-    feature.printHead();
+    // feature.printHead();
     cout<<"\n"; 
     Dataset label = dataset.extract(0, -1, 0, 0);
-    label.printHead();
+    // label.printHead();
     cout<<"\n"; 
     cout<<"-----------";
     train_test_split(feature, label, 0.2, X_train, X_test, y_train, y_test);
     cout<<endl;
-    int x,y;
-    y_train.getShape(x,y);
-    cout << "Shape: " << x << "x" << y << endl;
-    int l,r;
-    y_test.getShape(l,r);
-    cout << "Shape: " << l << "x" << r << endl;
-    // X_train.printHead();
+    // int x,y;
+    // X_train.getShape(x,y);
+    // cout << "Shape: " << x << "x" << y << endl;
+    // int l,r;
+    // X_test.getShape(l,r);
+    // cout << "Shape: " << l << "x" << r << endl;
+    cout<<"X_train:"<<endl;
+    X_train.printHead();
+    cout<<endl;
+    cout<<"X_test:"<<endl;
+    X_test.printHead();
+    cout<<endl;
+    cout<<"X_test.getData()->length() "<<X_test.getData()->length();
     // X_test.printHead();
     // y_train.printHead();
     // y_test.printHead();
