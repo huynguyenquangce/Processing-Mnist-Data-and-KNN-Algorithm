@@ -18,6 +18,7 @@ public:
     virtual void clear() = 0;
     virtual void print() const = 0;
     virtual void reverse() = 0;
+    virtual void selectionSort() = 0;
 };
 
 class Dataset
@@ -56,7 +57,7 @@ public:
     void fit(const Dataset  &X_train, const Dataset &y_train);
     Dataset predict(const Dataset &X_test);
     double score(const Dataset &y_test, const Dataset &y_pred);
-    double EuclideanDistance(const Dataset &X_test);
+    double EuclideanDistance(const Dataset &X_test,const Dataset &Y);
 };
 
 void train_test_split(Dataset &X, Dataset &y, double test_size,

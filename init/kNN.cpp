@@ -181,6 +181,30 @@ public:
         }
         head = prev;
     }
+
+    void selectionSort() {
+        if (size <= 1) {
+            return; // List is already sorted or empty
+        }
+
+        Node* current = head;
+        while (current != nullptr) {
+            Node* minNode = current;
+            Node* nextNode = current->next;
+            while (nextNode != nullptr) {
+                if (nextNode->data < minNode->data) {
+                    minNode = nextNode;
+                }
+                nextNode = nextNode->next;
+            }
+            // Swap data between current node and minNode
+            T temp = current->data;
+            current->data = minNode->data;
+            minNode->data = temp;
+
+            current = current->next;
+        }
+    }
 };
 
 /////////////////////////////////////////////
@@ -498,15 +522,16 @@ void kNN::fit(const Dataset &X_train, const Dataset &y_train)
     this->y_train = y_train;
     X_train.getShape(train_row,train_col);
 }
-double kNN::EuclideanDistance(const Dataset &X_test)
+double kNN::EuclideanDistance(const Dataset &X, const Dataset &Y)
 {
     double sum = 0.0;
     for(int i = 0; i < train_col;i++)
     {
-        sum += pow(X_test.getData()->get(i)- X_train.getData()->get(i),2);
+        sum += pow(X.getData()->get(i)- Y.getData()->get(i),2);
     }
     return sqrt(sum);
 };
+// Implement selectionSort for List
 
 Dataset kNN::predict(const Dataset &X_test)
 {
@@ -514,17 +539,28 @@ Dataset kNN::predict(const Dataset &X_test)
     int temp_result = 0;  // temp result for Euclidean distance
     Dataset X_save;
     // List to save data of Euclidean distance of each label
-    List<int> *save = new SinglyLinkedList<int>();
+    List<double> *save = new SinglyLinkedList<double>();
     // Number of dac diem X_test
     int X_test_number = X_test.getData()->length();
+    int X_train_number = X_train.getData()->length();
     // Calculate distance from X_test to X_train and save in save List 
     for(int i = 0; i<X_test_number;i++)
     {
-        for(int j = 0; j<train_col;j++)
+        for(int j = 0; j<X_train_number;j++)
         {
-            return y_pred;
+            temp_result = 0;
+            for(int k = 0; k<train_col;k++)
+            {
+                temp_result += pow(X_test.getData()->get(i)->get(k)- X_train.getData()->get(j)->get(k),2);
+            }
+            double distance = sqrt(temp_result);
+            save->push_back(distance);
         }
     }
+    save->print();
+    cout<<endl;
+    save->selectionSort();
+    save->print();
     return y_pred;
 }
 
