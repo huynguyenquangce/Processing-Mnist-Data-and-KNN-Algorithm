@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "new": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "istream": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "limits": "cpp",
+        "type_traits": "cpp",
+        "memory": "cpp",
+        "functional": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "cassert": "cpp"
+    }
+}
