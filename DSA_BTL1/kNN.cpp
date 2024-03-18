@@ -11,7 +11,7 @@ const int MAX_CLASSES = 1000;
 /////////////////////////////////////////////
 // Implement for class Dataset
 
-Dataset::Dataset() : data(new SinglyLinkedList<List<int> *>), numRows(0), numCols(0), header_name(new SinglyLinkedList<string>()) {}
+Dataset::Dataset() : data(new ArrList<List<int> *>(0,5)), numRows(0), numCols(0), header_name(new ArrList<string>(0,5)) {}
 
 Dataset::~Dataset()
 {
@@ -61,7 +61,7 @@ Dataset &Dataset::operator=(const Dataset &other)
         header_name->push_back(other.header_name->get(i));
     }
     // copy data
-    data = new SinglyLinkedList<List<int> *>;
+    data = new ArrList<List<int> *>(0,5);
     for (int i = 0; i < other.data->length(); i++)
     {
         List<int> *currentList = new SinglyLinkedList<int>;
@@ -331,7 +331,7 @@ void kNN::fit(const Dataset &X_train, const Dataset &y_train)
 // Implement selectionSort for List
 ///////////////////////
 /////////////////////////////////
-/*
+
 Dataset kNN::predict(const Dataset &X_test)
 {
     Dataset y_pred;
@@ -348,6 +348,7 @@ Dataset kNN::predict(const Dataset &X_test)
         int temp_result = 0; // temp result for Euclidean distance
         // List to save data of Euclidean distance of each label
         List<double> *save = new SinglyLinkedList<double>();
+        save->_to_Array();
         for (int j = 0; j < X_train_number; j++)
         {
             temp_result = 0;
@@ -361,13 +362,14 @@ Dataset kNN::predict(const Dataset &X_test)
         // result_sort->push_back(save);
         // Now we have distances, we need to find the k nearest neighbors
         List<int> *nearest_indices = new SinglyLinkedList<int>();
+        nearest_indices->_to_Array();
         for (int n = 0; n < k; n++)
         {
             double min_distance = MAX_DOUBLE;
             int min_index = -1;
             for (int j = 0; j < X_train_number; j++)
             {
-                if (save->get(j) < min_distance && !nearest_indices->contains(j))
+                if (save->get(j) < min_distance && !nearest_indices->find(j))
                 {
                     min_distance = save->get(j);
                     min_index = j;
@@ -395,6 +397,7 @@ Dataset kNN::predict(const Dataset &X_test)
         }
         // Save the predicted label
         List<int> *temp_list = new SinglyLinkedList<int>();
+        temp_list->_to_Array();
         temp_list->push_back(predicted_label);
         y_pred.getData()->push_back(temp_list);
 
@@ -403,7 +406,6 @@ Dataset kNN::predict(const Dataset &X_test)
         {
             class_counts[i] = 0;
         }
-
         delete save;            // Free memory
         delete nearest_indices; // Free memory
     }
@@ -420,10 +422,10 @@ Dataset kNN::predict(const Dataset &X_test)
     //     result_sort->get(i)->print();
     //     cout << endl;
     // }
-    y_pred.printHead();
+    // y_pred.printHead();
     return y_pred;
 }
-*/
+
 // Score method to evaluate the model's performance
 double kNN::score(const Dataset &y_test, const Dataset &y_pred)
 {

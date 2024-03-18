@@ -1,6 +1,5 @@
 #include "kNN.hpp"
-// #include "kNN.cpp"
-/*
+
 void tc1()
 {
     Dataset dataset;
@@ -54,13 +53,12 @@ void tc1()
     cout << "--------------";
     cout << endl;
     cout << "y_pred: ";
-    // Dataset y_pred = knn.predict(X_test);
+    Dataset y_pred = knn.predict(X_test);
     // double accuracy = knn.score(y_test, y_pred);
     // cout << "Accuracy: " << accuracy << endl;
 
     /////////////////////////////// Tests //////////////////////////
 }
-*/
 void tc2()
 {
     List<int> *p1 = new SinglyLinkedList<int>();
@@ -74,7 +72,7 @@ void tc2()
 }
 int main()
 {
-    // tc1();
-    tc2();
+    tc1();
+    // tc2();
     return 0;
 }

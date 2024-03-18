@@ -85,7 +85,7 @@ private:
     int count, cap;
 
 public:
-    ArrList() : count(0), cap(5) { pD = new T[5]; };
+    ArrList() : count(0), cap(5), pD(new T[5]) {};
     ArrList(int count = 0, int cap = 5)
     {
         this->count = count;
