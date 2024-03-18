@@ -38,16 +38,16 @@ void tc1(){
     // X_train.printTail();
     X_train.printHead();
     cout<<endl;
-    cout<<"X_test:"<<endl;
+    cout<<"y_train:"<<endl;
     // X_test.printTail();
-    X_test.printHead();
+    y_train.printHead();
     cout<<endl;
     // cout<<"X_test.getData()->length() "<<X_test.getData()->length();
     // X_test.printHead();
     // y_train.printHead();
     // y_test.printHead();
-    knn.fit(X_train, y_train);
-    Dataset y_pred = knn.predict(X_test); 
+    // knn.fit(X_train, y_train);
+    // Dataset y_pred = knn.predict(X_test); 
     // double accuracy = knn.score(y_test, y_pred);
     // cout << "Accuracy: " << accuracy << endl;
 

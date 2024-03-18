@@ -1,5 +1,6 @@
 #include "kNN.hpp"
-
+const double MAX_DOUBLE = 1.7976931348623157e+308;
+const int MAX_CLASSES = 1000;
 /* TODO: You can implement methods, functions that support your data structures here.
  * */
 
@@ -130,6 +131,20 @@ public:
         return current->data;
     }
 
+    bool contains(const T &value) const
+    {
+        Node *current = head;
+        while (current != nullptr)
+        {
+            if (current->data == value)
+            {
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
+
     int length() const
     {
         return size;
@@ -182,17 +197,22 @@ public:
         head = prev;
     }
 
-    void selectionSort() {
-        if (size <= 1) {
+    void selectionSort()
+    {
+        if (size <= 1)
+        {
             return; // List is already sorted or empty
         }
 
-        Node* current = head;
-        while (current != nullptr) {
-            Node* minNode = current;
-            Node* nextNode = current->next;
-            while (nextNode != nullptr) {
-                if (nextNode->data < minNode->data) {
+        Node *current = head;
+        while (current != nullptr)
+        {
+            Node *minNode = current;
+            Node *nextNode = current->next;
+            while (nextNode != nullptr)
+            {
+                if (nextNode->data < minNode->data)
+                {
                     minNode = nextNode;
                 }
                 nextNode = nextNode->next;
@@ -256,7 +276,7 @@ Dataset &Dataset::operator=(const Dataset &other)
     header_name->clear();
     numCols = other.numCols;
     numRows = other.numRows;
-        // copy header_name
+    // copy header_name
     header_name = new SinglyLinkedList<string>;
     for (int i = 0; i < other.header_name->length(); i++)
     {
@@ -492,13 +512,12 @@ Dataset Dataset::extract(int startRow, int endRow, int startCol, int endCol) con
     {
         List<int> *newRow = new SinglyLinkedList<int>;
 
-        for (int j = startCol ; j <= endCol; ++j)
+        for (int j = startCol; j <= endCol; ++j)
         {
             // Assuming data is a List<List<int>*> and each element is a List<int>
             List<int> *currentRow = data->get(i);
             newRow->push_back((currentRow->get(j)));
         }
-
         extractedDataset.data->push_back(newRow);
     }
     // Update the number of rows and columns in the extracted dataset
@@ -512,55 +531,110 @@ Dataset Dataset::extract(int startRow, int endRow, int startCol, int endCol) con
 ////////////////////////////////////////
 
 // Implement of class KNN
-kNN::kNN(int k) : k(k),train_row(0),  train_col(0), X_train(Dataset()), y_train(Dataset())
-{} // Initialize other members if needed
-
+kNN::kNN(int k) : k(k), train_row(0), train_col(0), X_train(Dataset()), y_train(Dataset())
+{
+} // Initialize other members if needed
 
 void kNN::fit(const Dataset &X_train, const Dataset &y_train)
 {
     this->X_train = X_train;
     this->y_train = y_train;
-    X_train.getShape(train_row,train_col);
+    X_train.getShape(train_row, train_col);
 }
-double kNN::EuclideanDistance(const Dataset &X, const Dataset &Y)
-{
-    double sum = 0.0;
-    for(int i = 0; i < train_col;i++)
-    {
-        sum += pow(X.getData()->get(i)- Y.getData()->get(i),2);
-    }
-    return sqrt(sum);
-};
+// double kNN::EuclideanDistance(const Dataset &X, const Dataset &Y)
+// {
+//     double sum = 0.0;
+//     for(int i = 0; i < train_col;i++)
+//     {
+//         sum += pow(X.getData()->get(i)- Y.getData()->get(i),2);
+//     }
+//     return sqrt(sum);
+// };
 // Implement selectionSort for List
-
+///////////////////////
+/////////////////////////////////
 Dataset kNN::predict(const Dataset &X_test)
 {
     Dataset y_pred;
-    int temp_result = 0;  // temp result for Euclidean distance
+    // Array to keep number of k smallerst distance
+    int class_counts[MAX_CLASSES] = {0};
+
+    int temp_result = 0; // temp result for Euclidean distance
     Dataset X_save;
-    // List to save data of Euclidean distance of each label
-    List<double> *save = new SinglyLinkedList<double>();
+    // // List 2D to save y_train respectively X_train
+    // List<List<double> *> *result_sort = new SinglyLinkedList<List<double> *>;
+    // List 2D to save data of Euclidean distance
+    // List<List<double> *> *result_sort = new SinglyLinkedList<List<double> *>;
     // Number of dac diem X_test
     int X_test_number = X_test.getData()->length();
     int X_train_number = X_train.getData()->length();
-    // Calculate distance from X_test to X_train and save in save List 
-    for(int i = 0; i<X_test_number;i++)
+    // Calculate distance from X_test to X_train and save in save List
+    for (int i = 0; i < X_test_number; i++)
     {
-        for(int j = 0; j<X_train_number;j++)
+        // List to save data of Euclidean distance of each label
+        List<double> *save = new SinglyLinkedList<double>();
+        for (int j = 0; j < X_train_number; j++)
         {
             temp_result = 0;
-            for(int k = 0; k<train_col;k++)
+            for (int k = 0; k < train_col; k++)
             {
-                temp_result += pow(X_test.getData()->get(i)->get(k)- X_train.getData()->get(j)->get(k),2);
+                temp_result += pow(X_test.getData()->get(i)->get(k) - X_train.getData()->get(j)->get(k), 2);
             }
             double distance = sqrt(temp_result);
             save->push_back(distance);
         }
+        // result_sort->push_back(save);
+        // Now we have distances, we need to find the k nearest neighbors
+        List<int> *nearest_indices = new SinglyLinkedList<int>();
+        for (int n = 0; n < k; n++)
+        {
+            double min_distance = MAX_DOUBLE;
+            int min_index = -1;
+            for (int j = 0; j < X_train_number; j++)
+            {
+                if (save->get(j) < min_distance && !nearest_indices->contains(j))
+                {
+                    min_distance = save->get(j);
+                    min_index = j;
+                }
+            }
+            nearest_indices->push_back(min_index);
+        }
+        for (int n = 0; n < k; n++)
+        {
+            int neighbor_index = nearest_indices->get(n);
+            List<int> *neighbor_labels = y_train.getData()->get(neighbor_index);
+            int label = neighbor_labels->get(0); // Assuming labels are stored in y_train
+            class_counts[label]++;
+        }
+        // Find the majority class
+        int max_count = 0;
+        int predicted_label = -1;
+        for (int i = 0; i < MAX_CLASSES; i++)
+        {
+            if (class_counts[i] > max_count)
+            {
+                max_count = class_counts[i];
+                predicted_label = i;
+            }
+        }
+        // Save the predicted label
+        y_pred.getData()->get(i)->push_back(predicted_label);
     }
-    save->print();
-    cout<<endl;
-    save->selectionSort();
-    save->print();
+
+    // cout << endl;
+    // result_sort->get(0)->print();
+    // cout << endl;
+    // // result_sort->get(1)->print();
+    // // cout << endl;
+    // cout << "After sort:" << endl;
+    // for (int i = 0; i < result_sort->length(); i++)
+    // {
+    //     result_sort->get(i)->selectionSort();
+    //     result_sort->get(i)->print();
+    //     cout << endl;
+    // }
+    y_pred.getData()->print();
     return y_pred;
 }
 
@@ -579,8 +653,8 @@ void train_test_split(Dataset &X, Dataset &y, double test_size,
     int num_test = ceil(test_size * numRowX);
     int num_train = numRowX - num_test;
 
-    X_train = X.extract(0,num_train-1,0,-1);
-    y_train = y.extract(0,num_train-1,0,0);
-    X_test = X.extract(num_train,numRowX-1,0,-1);
-    y_test = y.extract(num_train,numRowX-1,0,0);
+    X_train = X.extract(0, num_train - 1, 0, -1);
+    y_train = y.extract(0, num_train - 1, 0, 0);
+    X_test = X.extract(num_train, numRowX - 1, 0, -1);
+    y_test = y.extract(num_train, numRowX - 1, 0, 0);
 }
