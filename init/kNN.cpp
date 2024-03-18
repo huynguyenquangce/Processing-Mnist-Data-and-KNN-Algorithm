@@ -559,18 +559,14 @@ Dataset kNN::predict(const Dataset &X_test)
     // Array to keep number of k smallerst distance
     int class_counts[MAX_CLASSES] = {0};
 
-    int temp_result = 0; // temp result for Euclidean distance
     Dataset X_save;
-    // // List 2D to save y_train respectively X_train
-    // List<List<double> *> *result_sort = new SinglyLinkedList<List<double> *>;
-    // List 2D to save data of Euclidean distance
-    // List<List<double> *> *result_sort = new SinglyLinkedList<List<double> *>;
     // Number of dac diem X_test
     int X_test_number = X_test.getData()->length();
     int X_train_number = X_train.getData()->length();
     // Calculate distance from X_test to X_train and save in save List
     for (int i = 0; i < X_test_number; i++)
     {
+         int temp_result = 0; // temp result for Euclidean distance
         // List to save data of Euclidean distance of each label
         List<double> *save = new SinglyLinkedList<double>();
         for (int j = 0; j < X_train_number; j++)
@@ -619,7 +615,18 @@ Dataset kNN::predict(const Dataset &X_test)
             }
         }
         // Save the predicted label
-        y_pred.getData()->get(i)->push_back(predicted_label);
+        List<int> *temp_list = new SinglyLinkedList<int>();
+        temp_list->push_back(predicted_label);
+        y_pred.getData()->push_back(temp_list);
+
+        // Clear class_counts
+        for (int i = 0; i < MAX_CLASSES; i++)
+        {
+            class_counts[i] = 0;
+        }
+
+        delete save; // Free memory
+        delete nearest_indices; // Free memory
     }
 
     // cout << endl;
@@ -634,7 +641,7 @@ Dataset kNN::predict(const Dataset &X_test)
     //     result_sort->get(i)->print();
     //     cout << endl;
     // }
-    y_pred.getData()->print();
+    y_pred.printHead();
     return y_pred;
 }
 
