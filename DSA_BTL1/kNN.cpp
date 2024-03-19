@@ -187,6 +187,7 @@ void Dataset::printTail(int nRows, int nCols) const
 // Implement of getData() method
 List<List<int> *> *Dataset::getData() const
 {
+    // data->_to_Array();
     return data;
 }
 
@@ -335,6 +336,10 @@ void kNN::fit(const Dataset &X_train, const Dataset &y_train)
 Dataset kNN::predict(const Dataset &X_test)
 {
     Dataset y_pred;
+
+    // Assign header_name to extractedDataset
+    y_pred.getHeaderName()->push_back(y_train.getHeaderName()->get(0));
+
     // Array to keep number of k smallerst distance
     int class_counts[MAX_CLASSES] = {0};
 
@@ -409,20 +414,6 @@ Dataset kNN::predict(const Dataset &X_test)
         delete save;            // Free memory
         delete nearest_indices; // Free memory
     }
-
-    // cout << endl;
-    // result_sort->get(0)->print();
-    // cout << endl;
-    // // result_sort->get(1)->print();
-    // // cout << endl;
-    // cout << "After sort:" << endl;
-    // for (int i = 0; i < result_sort->length(); i++)
-    // {
-    //     result_sort->get(i)->selectionSort();
-    //     result_sort->get(i)->print();
-    //     cout << endl;
-    // }
-    // y_pred.printHead();
     return y_pred;
 }
 

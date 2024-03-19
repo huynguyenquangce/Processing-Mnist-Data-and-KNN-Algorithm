@@ -15,6 +15,7 @@
         "deque": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "unordered_map": "cpp"
     }
 }

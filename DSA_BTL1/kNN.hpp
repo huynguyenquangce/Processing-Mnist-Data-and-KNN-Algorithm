@@ -86,7 +86,7 @@ private:
 
 public:
     ArrList() : count(0), cap(5), pD(new T[5]) {};
-    ArrList(int count = 0, int cap = 5)
+    ArrList(int count, int cap)
     {
         this->count = count;
         this->cap = cap;
@@ -267,7 +267,8 @@ private:
     {
         T data;
         Node *next;
-        Node(const T &value) : data(value), next(nullptr) {}
+        Node(const T &value) : data(value), next(nullptr) {};
+        Node(const T &value, Node *next) : data(value), next(next) {};
     };
     Node *head;
     int size;
@@ -347,30 +348,41 @@ public:
     // Insertion at index
     void insert(int index, T value)
     {
-        Node *new_node = new Node(value);
-        if (index < 0 || index > size)
-        {
-            return;
-        }
+        // Node *new_node = new Node(value);
+        // if (index < 0 || index > size)
+        // {
+        //     return;
+        // }
 
-        if (size == 0)
-        {
-            head = new_node;
-        }
-        if (index == 0)
-        {
-            push_front(value);
-            return;
-        }
+        // if (size == 0)
+        // {
+        //     head = new_node;
+        // }
+        // if (index == 0)
+        // {
+        //     push_front(value);
+        //     return;
+        // }
 
-        Node *current = head;
-        for (int i = 0; i < index - 1; ++i)
-        {
-            current = current->next;
-        }
-        new_node->next = current->next;
-        current->next = new_node;
-        size++;
+        // Node *current = head;
+        // for (int i = 0; i < index - 1; ++i)
+        // {
+        //     current = current->next;
+        // }
+        // new_node->next = current->next;
+        // current->next = new_node;
+        // size++;
+        // Test
+        if (index < 0) index = 0;
+            else if (index > size) index = size;
+            Node** pp = &head;
+            while (index)
+            {
+                pp = &((*pp)->next);
+                index--;
+            }
+            *pp = new Node(value,*pp);
+            size++;
     }
     // Remove at index
     void remove(int index)
