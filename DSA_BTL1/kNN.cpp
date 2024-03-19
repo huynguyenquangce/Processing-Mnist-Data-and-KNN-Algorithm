@@ -112,39 +112,65 @@ bool Dataset::loadFromCSV(const char *fileName)
 }
 // void Dataset::printHead(int nRows,  int nCols) const {};
 // Implement of printHead
-void Dataset::printHead(int nRows, int nCols) const
-{
+// void Dataset::printHead(int nRows, int nCols) const
+// {
+//     // Print header names
+//     const List<string> &headerNames = *header_name;
+//     for (int j = 0; j < min(nCols, headerNames.length()); ++j)
+//     {
+//         cout << headerNames.get(j) << " ";
+//     }
+//     // this->columns();
+//     cout << endl;
+//     // Print data
+//     int totalRows = data->length();
+//     for (int i = 0; i < min(nRows, totalRows); ++i)
+//     {
+//         const List<int> *row = data->get(i);
+
+//         for (int j = 0; j < min(nCols, row->length()); ++j)
+//         {
+//             cout << row->get(j) << " ";
+//         }
+//         // cout << endl;
+//         // Check if it's not the last row before printing newline
+//         if (i < min(nRows, totalRows) - 1)
+//         {
+//             cout << endl;
+//         }
+//     }
+//     // If numberRows and Col <0
+//     if (numCols < 0 || numCols < 0)
+//     {
+//         return;
+//     }
+//     return;
+// }
+void Dataset::printHead(int nRows, int nCols) const {
     // Print header names
     const List<string> &headerNames = *header_name;
-    for (int j = 0; j < min(nCols, headerNames.length()); ++j)
-    {
+    for (int j = 0; j < min(nCols, headerNames.length()); ++j) {
         cout << headerNames.get(j) << " ";
     }
-    // this->columns();
     cout << endl;
+
     // Print data
     int totalRows = data->length();
-    for (int i = 0; i < min(nRows, totalRows); ++i)
-    {
+    for (int i = 0; i < min(nRows, totalRows); ++i) {
         const List<int> *row = data->get(i);
 
-        for (int j = 0; j < min(nCols, row->length()); ++j)
-        {
-            cout << row->get(j) << " ";
+        for (int j = 0; j < min(nCols, row->length()); ++j) {
+            cout << row->get(j);
+            // Check if it's not the last column
+            if (j < min(nCols, row->length()) - 1) {
+                cout << " ";
+            }
         }
-        // cout << endl;
-        // Check if it's not the last row before printing newline
-        if (i < min(nRows, totalRows) - 1)
-        {
+        // Check if it's not the last row
+        if (i < min(nRows, totalRows) - 1) {
             cout << endl;
         }
     }
-    // If numberRows and Col <0
-    if (numCols < 0 || numCols < 0)
-    {
-        return;
-    }
-    return;
 }
 
 // Implement of PrintTail
@@ -420,9 +446,17 @@ Dataset kNN::predict(const Dataset &X_test)
 // Score method to evaluate the model's performance
 double kNN::score(const Dataset &y_test, const Dataset &y_pred)
 {
-    // Implement the scoring logic here and return the accuracy or other metric
-
-    return 0.0; // Placeholder, replace with actual value
+    int total_img = y_test.getData()->length();
+    int number_correct_img = 0;
+    for(int i = 0; i < total_img; i++)
+    {
+            if(y_test.getData()->get(i)->get(0) == y_pred.getData()->get(i)->get(0))
+            {
+                number_correct_img +=1;
+            }
+    }
+    double accuracy = static_cast<double>(number_correct_img) / total_img;
+    return accuracy; // Placeholder, replace with actual value
 }
 
 void train_test_split(Dataset &X, Dataset &y, double test_size,
