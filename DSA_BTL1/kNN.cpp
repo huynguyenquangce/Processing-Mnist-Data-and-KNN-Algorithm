@@ -146,11 +146,42 @@ bool Dataset::loadFromCSV(const char *fileName)
 //     }
 //     return;
 // }
+//////////////////////////////////
+// void Dataset::printHead(int nRows, int nCols) const {
+//     // Print header names
+//     const List<string> &headerNames = *header_name;
+//     for (int j = 0; j < min(nCols, headerNames.length()); ++j) {
+//         cout << headerNames.get(j) << " ";
+//     }
+//     cout << endl;
+
+//     // Print data
+//     int totalRows = data->length();
+//     for (int i = 0; i < min(nRows, totalRows); ++i) {
+//         const List<int> *row = data->get(i);
+
+//         for (int j = 0; j < min(nCols, row->length()); ++j) {
+//             cout << row->get(j);
+//             // Check if it's not the last column
+//             if (j < min(nCols, row->length()) - 1) {
+//                 cout << " ";
+//             }
+//         }
+//         // Check if it's not the last row
+//         if (i < min(nRows, totalRows) - 1) {
+//             cout << endl;
+//         }
+//     }
+// }
 void Dataset::printHead(int nRows, int nCols) const {
     // Print header names
     const List<string> &headerNames = *header_name;
     for (int j = 0; j < min(nCols, headerNames.length()); ++j) {
-        cout << headerNames.get(j) << " ";
+        cout << headerNames.get(j);
+        // Check if it's not the last column
+        if (j < min(nCols, headerNames.length()) - 1) {
+            cout << " ";
+        }
     }
     cout << endl;
 
@@ -174,6 +205,45 @@ void Dataset::printHead(int nRows, int nCols) const {
 }
 
 // Implement of PrintTail
+// void Dataset::printTail(int nRows, int nCols) const
+// {
+//     // If numberRows and Col <0
+//     if (numCols < 0 || numCols < 0)
+//     {
+//         return;
+//     }
+//     int totalRows = data->length();
+//     int startRow = max(0, totalRows - nRows); // Starting row index
+
+//     // Print header names
+//     const List<std::string> &headerNames = *header_name;
+//     for (int j = max(0, headerNames.length() - nCols); j < headerNames.length(); ++j)
+//     {
+//         cout << headerNames.get(j) << " ";
+//         // Check if it's not the last column
+//         if (j < min(nCols, headerNames.length()) - 1) {
+//             cout << " ";
+//         }
+//     }
+//     cout << endl;
+
+//     // Print data
+//     for (int i = startRow; i < totalRows; ++i)
+//     {
+//         const List<int> *row = data->get(i);
+
+//         for (int j = max(0, row->length() - nCols); j < row->length(); ++j)
+//         {
+//             cout << row->get(j) << " ";
+//         }
+//         // Check if it's not the last row before printing newline
+//         if (i < totalRows - 1)
+//         {
+//             cout << endl;
+//         }
+//     }
+//     return;
+// }
 void Dataset::printTail(int nRows, int nCols) const
 {
     // If numberRows and Col <0
@@ -186,9 +256,15 @@ void Dataset::printTail(int nRows, int nCols) const
 
     // Print header names
     const List<std::string> &headerNames = *header_name;
+    bool isFirstColumn = true;
     for (int j = max(0, headerNames.length() - nCols); j < headerNames.length(); ++j)
     {
-        cout << headerNames.get(j) << " ";
+        if (!isFirstColumn)
+        {
+            cout << " ";
+        }
+        cout << headerNames.get(j);
+        isFirstColumn = false;
     }
     cout << endl;
 
@@ -196,13 +272,17 @@ void Dataset::printTail(int nRows, int nCols) const
     for (int i = startRow; i < totalRows; ++i)
     {
         const List<int> *row = data->get(i);
+        isFirstColumn = true;
 
         for (int j = max(0, row->length() - nCols); j < row->length(); ++j)
         {
-            cout << row->get(j) << " ";
+            if (!isFirstColumn)
+            {
+                cout << " ";
+            }
+            cout << row->get(j);
+            isFirstColumn = false;
         }
-        // cout << endl;
-        // Check if it's not the last row before printing newline
         if (i < totalRows - 1)
         {
             cout << endl;
@@ -210,6 +290,7 @@ void Dataset::printTail(int nRows, int nCols) const
     }
     return;
 }
+
 // Implement of getData() method
 List<List<int> *> *Dataset::getData() const
 {

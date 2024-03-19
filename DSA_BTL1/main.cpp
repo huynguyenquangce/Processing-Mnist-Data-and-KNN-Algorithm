@@ -79,11 +79,31 @@ dataset.loadFromCSV("mnist.csv");
 dataset.printHead();
 dataset.printHead();
 }
+void tc1130()
+{
+Dataset dataset;
+dataset.loadFromCSV("mnist.csv");
+dataset.printTail(10, 12);
+}
+void tc1057()
+{
+Dataset dataset;
+dataset.loadFromCSV("mnist.csv");
+List<int> *row = dataset.getData()->get(0);
+
+row->insert(0, 1);
+row->insert(1, 3);
+row->insert(2, 2);
+row->remove(2);
+
+cout << row->length() << endl;
+row->print();
+}
 int main()
 {
     // tc1();
     // tc2();
     // tc3();
-    tc1114();
+    tc1057();
     return 0;
 }

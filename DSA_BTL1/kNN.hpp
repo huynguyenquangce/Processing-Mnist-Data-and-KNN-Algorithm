@@ -349,11 +349,10 @@ public:
     void insert(int index, T value)
     {
         // Node *new_node = new Node(value);
-        // if (index < 0 || index > size)
-        // {
-        //     return;
-        // }
-
+        if (index < 0 || index > size)
+        {
+            return;
+        }
         // if (size == 0)
         // {
         //     head = new_node;
