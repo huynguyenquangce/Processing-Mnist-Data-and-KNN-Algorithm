@@ -3,7 +3,7 @@
 void tc1()
 {
     Dataset dataset;
-    dataset.loadFromCSV("mnist.csv");
+    dataset.loadFromCSV("test.csv");
     int nRows, nCols;
 
     kNN knn;
@@ -51,8 +51,8 @@ void tc3()
 }
 void tc4()
 {
-Dataset dataset;
-    dataset.loadFromCSV("mnist.csv");
+    Dataset dataset;
+    dataset.loadFromCSV("test.csv");
     int nRows, nCols;
 
     kNN knn;
@@ -101,9 +101,9 @@ row->print();
 }
 int main()
 {
-    // tc1();
-    // tc2();
-    // tc3();
-    tc1057();
+    tc4();
+    // // // tc2();
+    // // // tc3();
+    // tc1057();
     return 0;
 }
